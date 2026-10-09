@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ExposureLab | Counterparty Risk Dashboard</title>
+  <style>
+    :root {
+      --ink: #17243a;
+      --muted: #6d7b8e;
+      --line: #e6ebf1;
+      --paper: #ffffff;
+      --canvas: #f4f7fb;
+      --navy: #10243d;
+      --blue: #3578e5;
+      --teal: #19a98c;
+      --green: #18856e;
+      --amber: #bd7717;
+      --red: #bb4a55;
+      --shadow: 0 8px 25px rgba(22, 41, 66, .055);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    button, select { font: inherit; }
+    .shell { display: flex; min-height: 100vh; }
+    aside {
+      width: 248px;
+      flex: 0 0 248px;
+      background: var(--navy);
+      color: #eaf1f8;
+      padding: 26px 18px;
+      display: flex;
+      flex-direction: column;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; padding: 0 10px 30px; }
+    .brand-mark {
+      width: 35px; height: 35px; border-radius: 11px; display: grid; place-items: center;
+      background: linear-gradient(135deg, #39c8a7, #3279e5); color: white; font-weight: 800;
+    }
+    .brand strong { display: block; letter-spacing: .2px; font-size: 15px; }
+    .brand small { display: block; margin-top: 2px; color: #9eafc2; font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; }
+    .nav-label { color: #788ca4; padding: 0 12px; margin: 12px 0 9px; font-size: 10px; font-weight: 700; letter-spacing: 1.3px; text-transform: uppercase; }
+    .nav-item {
+      display: flex; gap: 12px; align-items: center; padding: 11px 12px; margin: 2px 0;
+      border-radius: 9px; color: #b7c5d4; font-size: 13px;
+    }
+    .nav-item.active { color: #fff; background: #1c3b5a; box-shadow: inset 3px 0 #3bc5a5; }
+    .nav-icon { width: 17px; text-align: center; opacity: .9; }
+    .side-card {
+      margin-top: auto; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
+      padding: 15px; border-radius: 12px; font-size: 11px; color: #bccbd9; line-height: 1.65;
+    }
+    .side-card strong { color: white; display: block; font-size: 12px; margin-bottom: 5px; }
+    main { flex: 1; min-width: 0; padding: 25px 34px 40px; max-width: 1600px; margin: 0 auto; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 24px; }
+    .crumb { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+    h1 { font-size: 25px; letter-spacing: -.6px; margin: 0; color: #172a43; }
+    .subtitle { color: var(--muted); font-size: 12px; margin-top: 6px; }
+    .run-pill {
+      display: flex; align-items: center; gap: 8px; background: white; padding: 9px 13px;
+      border: 1px solid var(--line); border-radius: 999px; color: #4c5b6e; font-size: 11px; white-space: nowrap;
+    }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 0 3px #def5ef; }
+    .notice {
+      border: 1px solid #d8e8fb; background: #edf5ff; color: #456482; padding: 10px 14px;
+      border-radius: 9px; font-size: 11px; margin-bottom: 19px;
+    }
+    .notice strong { color: #2b527a; }
+    .kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-bottom: 16px; }
+    .card {
+      background: var(--paper); border: 1px solid var(--line); border-radius: 13px;
+      box-shadow: var(--shadow);
+    }
+    .kpi { padding: 17px 18px 15px; min-height: 116px; }
+    .kpi-label { color: var(--muted); font-size: 11px; font-weight: 600; }
+    .kpi-value { font-size: 25px; font-weight: 730; margin: 13px 0 4px; letter-spacing: -.7px; color: #172a43; }
+    .kpi-foot { color: #8a97a7; font-size: 10px; }
+    .accent-blue { color: var(--blue); } .accent-green { color: var(--green); } .accent-amber { color: var(--amber); }
+    .grid-main { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(310px, .9fr); gap: 15px; align-items: stretch; }
+    .panel { padding: 18px 19px; }
+    .panel-head { display: flex; justify-content: space-between; gap: 14px; align-items: flex-start; margin-bottom: 13px; }
+    .panel-title { font-size: 14px; font-weight: 700; color: #21354e; }
+    .panel-sub { color: #8a97a7; font-size: 10px; margin-top: 4px; }
+    select {
+      border: 1px solid #dce3ec; color: #43536a; background: #fff; padding: 8px 30px 8px 10px;
+      border-radius: 8px; font-size: 10px; outline: none; max-width: 210px;
+    }
+    .chart { width: 100%; min-height: 240px; }
+    .chart svg { width: 100%; height: auto; display: block; }
+    .legend { display: flex; align-items: center; gap: 16px; color: #7b8999; font-size: 10px; }
+    .legend span { display: flex; align-items: center; gap: 6px; }
+    .swatch { width: 17px; height: 3px; border-radius: 3px; display: inline-block; }
+    .swatch.dashed { background: repeating-linear-gradient(to right, #9babc0 0 4px, transparent 4px 7px); }
+    .cva-row { display: grid; grid-template-columns: 1fr auto; gap: 6px 10px; align-items: center; margin: 15px 2px; }
+    .cva-label { font-size: 10px; color: #65758a; }
+    .cva-value { font-size: 11px; font-weight: 700; color: #243952; }
+    .bar-track { height: 7px; background: #eff2f6; border-radius: 9px; overflow: hidden; grid-column: 1 / -1; }
+    .bar-fill { height: 100%; border-radius: inherit; }
+    .v-divider { border: 0; border-top: 1px solid #edf0f4; margin: 14px 0; }
+    .detail-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 9px; }
+    .detail { background: #f7f9fc; padding: 10px 11px; border-radius: 8px; }
+    .detail span { display: block; font-size: 9px; color: #8a97a7; margin-bottom: 5px; }
+    .detail strong { font-size: 12px; color: #31445c; }
+    .lower-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(340px, .8fr); gap: 15px; margin-top: 15px; }
+    .table-wrap { overflow-x: auto; }
+    table { border-collapse: collapse; width: 100%; min-width: 470px; font-size: 10px; }
+    th { text-align: left; color: #8a97a7; font-size: 9px; font-weight: 650; padding: 9px 7px; border-bottom: 1px solid var(--line); }
+    td { color: #4f6075; padding: 10px 7px; border-bottom: 1px solid #f0f2f5; white-space: nowrap; }
+    td.num { text-align: right; font-variant-numeric: tabular-nums; }
+    .tag { border-radius: 999px; padding: 4px 7px; font-size: 9px; background: #edf4ff; color: #4771a9; }
+    .benchmark { display: flex; gap: 12px; align-items: center; margin: 14px 0; }
+    .benchmark-icon { width: 34px; height: 34px; border-radius: 10px; background: #eaf8f4; color: #198a70; display: grid; place-items: center; font-size: 17px; }
+    .benchmark strong { display: block; color: #30465f; font-size: 12px; }
+    .benchmark small { display: block; color: #8794a5; font-size: 9px; margin-top: 3px; }
+    .progress { height: 8px; background: #edf1f5; border-radius: 9px; position: relative; margin: 15px 4px 7px; }
+    .progress-range { position: absolute; height: 100%; border-radius: inherit; background: #d8eee7; }
+    .progress-point { position: absolute; width: 13px; height: 13px; border: 3px solid white; border-radius: 50%; background: var(--blue); top: -2.5px; box-shadow: 0 0 0 1px var(--blue); }
+    .progress-labels { display: flex; justify-content: space-between; color: #8b98a7; font-size: 9px; }
+    details { margin-top: 13px; border-top: 1px solid #edf0f4; padding-top: 11px; }
+    summary { cursor: pointer; color: #52709a; font-size: 10px; font-weight: 650; }
+    .sensitivity-table { max-height: 235px; overflow: auto; margin-top: 8px; }
+    .sensitivity-table table { min-width: 400px; }
+    .footer { color: #96a1af; font-size: 9px; text-align: center; margin: 22px 0 0; }
+    .loading { color: var(--muted); padding: 30px; font-size: 12px; }
+    @media (max-width: 1050px) {
+      aside { width: 205px; flex-basis: 205px; }
+      main { padding: 22px 22px 34px; }
+      .kpis { grid-template-columns: repeat(2,1fr); }
+      .grid-main,.lower-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 650px) {
+      aside { display: none; }
+      main { padding: 18px 13px 28px; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      h1 { font-size: 21px; }
+      .kpis { gap: 9px; }
+      .kpi { padding: 13px; min-height: 103px; }
+      .kpi-value { font-size: 20px; }
+      .panel { padding: 14px 12px; }
+      .panel-head { flex-direction: column; }
+      select { max-width: 100%; width: 100%; }
+      .grid-main,.lower-grid { gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside>
+      <div class="brand">
+        <div class="brand-mark">E</div>
+        <div><strong>ExposureLab</strong><small>Counterparty risk</small></div>
+      </div>
+      <div class="nav-label">Workspace</div>
+      <div class="nav-item active"><span class="nav-icon">◈</span>Portfolio overview</div>
+      <div class="nav-item"><span class="nav-icon">⌁</span>Exposure profiles</div>
+      <div class="nav-item"><span class="nav-icon">▤</span>Model diagnostics</div>
+      <div class="nav-label">Analysis</div>
+      <div class="nav-item"><span class="nav-icon">◎</span>Netting &amp; collateral</div>
+      <div class="nav-item"><span class="nav-icon">↗</span>Convergence study</div>
+      <div class="side-card">
+        <strong>Research model</strong>
+        One-factor Hull-White<br>
+        Single-curve swap valuation<br>
+        Weekly exposure grid
+      </div>
+    </aside>
+
+    <main>
+      <div class="topbar">
+        <div>
+          <div class="crumb">Risk analytics &nbsp;›&nbsp; Counterparty exposure</div>
+          <h1>Counterparty Credit Exposure</h1>
+          <div class="subtitle">Monte Carlo exposure and unilateral CVA for an interest-rate swap portfolio</div>
+        </div>
+        <div class="run-pill"><span class="dot"></span><span id="run-label">Loading reference run…</span></div>
+      </div>
+
+      <div class="notice"><strong>Reference run:</strong> seeded sample portfolio and illustrative market inputs. This dashboard reads the report files included with the project; it is not connected to live market data.</div>
+
+      <section class="kpis">
+        <div class="card kpi">
+          <div class="kpi-label">NETTED CVA · NO COLLATERAL</div>
+          <div class="kpi-value accent-blue" id="kpi-cva-net">—</div>
+          <div class="kpi-foot">Counterparty loss estimate</div>
+        </div>
+        <div class="card kpi">
+          <div class="kpi-label">NETTED CVA · WITH CSA</div>
+          <div class="kpi-value accent-green" id="kpi-cva-coll">—</div>
+          <div class="kpi-foot">Threshold, MTA and MPOR applied</div>
+        </div>
+        <div class="card kpi">
+          <div class="kpi-label">97.5% PEAK PFE</div>
+          <div class="kpi-value accent-amber" id="kpi-pfe">—</div>
+          <div class="kpi-foot">Selected scenario · exposure quantile</div>
+        </div>
+        <div class="card kpi">
+          <div class="kpi-label">SWAP PRICING ERROR</div>
+          <div class="kpi-value" id="kpi-error">—</div>
+          <div class="kpi-foot">Absolute Monte Carlo vs analytic value</div>
+        </div>
+      </section>
+
+      <section class="grid-main">
+        <div class="card panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Exposure profile</div>
+              <div class="panel-sub">Expected exposure (EE) and 97.5% potential future exposure (PFE)</div>
+            </div>
+            <select id="scenario-select" aria-label="Select exposure scenario"></select>
+          </div>
+          <div class="legend">
+            <span><i class="swatch" style="background:#3578e5"></i>EE</span>
+            <span><i class="swatch dashed"></i>PFE 97.5%</span>
+          </div>
+          <div class="chart" id="exposure-chart"><div class="loading">Loading exposure profile…</div></div>
+        </div>
+
+        <div class="card panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">CVA by scenario</div>
+              <div class="panel-sub">Netting and collateral reduce positive exposure</div>
+            </div>
+          </div>
+          <div id="cva-chart" class="chart"><div class="loading">Loading scenario results…</div></div>
+          <hr class="v-divider">
+          <div class="detail-grid">
+            <div class="detail"><span>COUNTERPARTY HAZARD</span><strong id="hazard">—</strong></div>
+            <div class="detail"><span>RECOVERY RATE</span><strong id="recovery">—</strong></div>
+            <div class="detail"><span>CSA THRESHOLD</span><strong id="threshold">—</strong></div>
+            <div class="detail"><span>MTA / MPOR</span><strong id="mta-mpor">—</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="lower-grid">
+        <div class="card panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Path-count convergence</div>
+              <div class="panel-sub">Swap value is checked against the analytic curve valuation</div>
+            </div>
+            <span class="tag">Pricing diagnostic</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>PATHS</th><th class="num">MC VALUE</th><th class="num">STD. ERROR</th><th class="num">ABS. ERROR</th><th class="num">NETTED CVA</th></tr></thead>
+              <tbody id="convergence-rows"></tbody>
+            </table>
+          </div>
+          <div class="benchmark">
+            <div class="benchmark-icon">✓</div>
+            <div><strong id="benchmark-line">Analytic benchmark</strong><small>95% confidence interval shown in the pricing report</small></div>
+          </div>
+          <div class="progress"><div class="progress-range" id="ci-range"></div><div class="progress-point" id="ci-point"></div></div>
+          <div class="progress-labels"><span id="ci-low">—</span><span>95% interval</span><span id="ci-high">—</span></div>
+        </div>
+
+        <div class="card panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Model setup</div>
+              <div class="panel-sub">Inputs saved with this reproducible run</div>
+            </div>
+            <span class="tag">Hull-White 1F</span>
+          </div>
+          <div class="detail-grid">
+            <div class="detail"><span>MEAN REVERSION · a</span><strong id="mean-reversion">—</strong></div>
+            <div class="detail"><span>RATE VOLATILITY · σ</span><strong id="volatility">—</strong></div>
+            <div class="detail"><span>PATHS / SEED</span><strong id="paths-seed">—</strong></div>
+            <div class="detail"><span>OBSERVATION GRID</span><strong>Weekly</strong></div>
+          </div>
+          <details>
+            <summary>View parameter sensitivity rows</summary>
+            <div class="sensitivity-table">
+              <table>
+                <thead><tr><th>INPUT</th><th>VALUE</th><th>COLLATERALIZED CVA</th></tr></thead>
+                <tbody id="sensitivity-rows"></tbody>
+              </table>
+            </div>
+          </details>
+        </div>
+      </section>
+      <div class="footer">ExposureLab demo · Example model outputs only · No live market feed or production risk approval</div>
+    </main>
+  </div>
+
+  <script>
+    const currency = new Intl.NumberFormat("en-US", {style:"currency", currency:"USD", maximumFractionDigits:0});
+    const compactCurrency = new Intl.NumberFormat("en-US", {style:"currency", currency:"USD", notation:"compact", maximumFractionDigits:1});
+    const number = new Intl.NumberFormat("en-US", {maximumFractionDigits:0});
+    const labels = {
+      netted_uncollateralized: "Netted · Uncollateralized",
+      unnetted_uncollateralized: "Unnetted · Uncollateralized",
+      netted_collateralized: "Netted · Collateralized",
+      unnetted_collateralized: "Unnetted · Collateralized"
+    };
+    const colors = {
+      netted_uncollateralized: "#3578e5",
+      unnetted_uncollateralized: "#d9822b",
+      netted_collateralized: "#19a98c",
+      unnetted_collateralized: "#bb4a55"
+    };
+    function parseCsv(text) {
+      const lines = text.trim().split(/\r?\n/);
+      const headers = lines.shift().split(",");
+      return lines.map(line => {
+        const cells = line.split(",");
+        const row = {};
+        headers.forEach((key, index) => {
+          const value = cells[index];
+          row[key] = value !== "" && !Number.isNaN(Number(value)) ? Number(value) : value;
+        });
+        return row;
+      });
+    }
+    function esc(value) {
+      return String(value).replace(/[&<>"]/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[char]));
+    }
+    function renderProfile(rows) {
+      const box = document.getElementById("exposure-chart");
+      const width = 760, height = 310, left = 60, right = 735, top = 25, bottom = 260;
+      const maxTime = Math.max(...rows.map(row => row.time_years));
+      const pfeKey = Object.keys(rows[0]).find(key => key.indexOf("PFE_") === 0);
+      const maxValue = Math.max(...rows.map(row => Math.max(row.EE, row[pfeKey])));
+      const ymax = maxValue > 0 ? maxValue * 1.08 : 1;
+      const x = value => left + value / maxTime * (right - left);
+      const y = value => bottom - value / ymax * (bottom - top);
+      let svg = '<svg viewBox="0 0 '+width+' '+height+'" role="img" aria-label="Expected and potential future exposure by year">';
+      for (let i=0; i<=4; i++) {
+        const yy = top + (bottom-top)*i/4;
+        const val = ymax*(1-i/4);
+        svg += '<line x1="'+left+'" y1="'+yy+'" x2="'+right+'" y2="'+yy+'" stroke="#e9edf2"/>';
+        svg += '<text x="'+(left-9)+'" y="'+(yy+4)+'" text-anchor="end" font-size="10" fill="#8391a2">'+compactCurrency.format(val)+'</text>';
+      }
+      for (let i=0; i<=5; i++) {
+        const xx = left + (right-left)*i/5;
+        svg += '<line x1="'+xx+'" y1="'+top+'" x2="'+xx+'" y2="'+bottom+'" stroke="#f1f3f6"/>';
+        svg += '<text x="'+xx+'" y="'+(bottom+21)+'" text-anchor="middle" font-size="10" fill="#8391a2">'+(maxTime*i/5).toFixed(0)+'</text>';
+      }
+      const eePoints = rows.map(row => x(row.time_years)+","+y(row.EE)).join(" ");
+      const pfePoints = rows.map(row => x(row.time_years)+","+y(row[pfeKey])).join(" ");
+      svg += '<polyline points="'+eePoints+'" fill="none" stroke="#3578e5" stroke-width="3"/>';
+      svg += '<polyline points="'+pfePoints+'" fill="none" stroke="#9aa9bd" stroke-width="2" stroke-dasharray="7 6"/>';
+      svg += '<line x1="'+left+'" y1="'+bottom+'" x2="'+right+'" y2="'+bottom+'" stroke="#66778c"/>';
+      svg += '<text x="'+((left+right)/2)+'" y="300" text-anchor="middle" font-size="10" fill="#718095">Years</text></svg>';
+      box.innerHTML = svg;
+      document.getElementById("kpi-pfe").textContent = compactCurrency.format(maxValue);
+    }
+    function renderCva(summary) {
+      const max = Math.max(...summary.map(row => row.CVA), 1) * 1.12;
+      const container = document.getElementById("cva-chart");
+      container.innerHTML = "";
+      summary.forEach(row => {
+        const wrap = document.createElement("div");
+        wrap.className = "cva-row";
+        const label = document.createElement("div");
+        label.className = "cva-label";
+        label.textContent = labels[row.scenario] || row.scenario;
+        const value = document.createElement("div");
+        value.className = "cva-value";
+        value.textContent = currency.format(row.CVA);
+        const track = document.createElement("div");
+        track.className = "bar-track";
+        const fill = document.createElement("div");
+        fill.className = "bar-fill";
+        fill.style.width = Math.max(1, row.CVA/max*100) + "%";
+        fill.style.background = colors[row.scenario] || "#3578e5";
+        track.appendChild(fill);
+        wrap.append(label, value, track);
+        container.appendChild(wrap);
+      });
+    }
+    function renderConvergence(rows) {
+      document.getElementById("convergence-rows").innerHTML = rows.map(row =>
+        '<tr><td>'+number.format(row.path_count)+'</td><td class="num">'+currency.format(row.monte_carlo_swap_value)+'</td><td class="num">'+currency.format(row.swap_standard_error)+'</td><td class="num">'+currency.format(row.absolute_swap_error)+'</td><td class="num">'+currency.format(row.netted_uncollateralized_cva)+'</td></tr>'
+      ).join("");
+    }
+    function renderSensitivity(rows) {
+      document.getElementById("sensitivity-rows").innerHTML = rows.map(row =>
+        '<tr><td>'+esc(row.parameter.replaceAll("_"," "))+'</td><td>'+number.format(row.value)+'</td><td>'+currency.format(row.netted_collateralized_cva)+'</td></tr>'
+      ).join("");
+    }
+    async function init() {
+      try {
+        const paths = [
+          fetch("../reports/reference_run/scenario_summary.csv").then(response => response.text()).then(parseCsv),
+          fetch("../reports/reference_run/exposure_profiles.csv").then(response => response.text()).then(parseCsv),
+          fetch("../reports/reference_run/path_count_convergence.csv").then(response => response.text()).then(parseCsv),
+          fetch("../reports/reference_run/parameter_sensitivity.csv").then(response => response.text()).then(parseCsv),
+          fetch("../reports/reference_run/analytic_vs_monte_carlo.csv").then(response => response.text()).then(parseCsv),
+          fetch("../reports/reference_run/run_metadata.json").then(response => response.json())
+        ];
+        const [summary, profiles, convergence, sensitivity, pricingRows, metadata] = await Promise.all(paths);
+        const pricing = pricingRows[0];
+        const selected = document.getElementById("scenario-select");
+        selected.innerHTML = Object.keys(labels).map(key => '<option value="'+key+'">'+labels[key]+'</option>').join("");
+        selected.value = "netted_uncollateralized";
+        const updateScenario = () => {
+          const key = selected.value;
+          const profile = profiles.filter(row => row.scenario === key);
+          renderProfile(profile);
+          const scenario = summary.find(row => row.scenario === key);
+          const net = summary.find(row => row.scenario === "netted_uncollateralized");
+          const coll = summary.find(row => row.scenario === "netted_collateralized");
+          document.getElementById("kpi-cva-net").textContent = currency.format(net.CVA);
+          document.getElementById("kpi-cva-coll").textContent = currency.format(coll.CVA);
+          document.getElementById("kpi-pfe").textContent = compactCurrency.format(scenario.peak_PFE_97_5);
+        };
+        selected.addEventListener("change", updateScenario);
+        updateScenario();
+        renderCva(summary);
+        renderConvergence(convergence);
+        renderSensitivity(sensitivity);
+        document.getElementById("run-label").textContent = number.format(metadata.path_count)+" paths · seed "+metadata.seed;
+        document.getElementById("hazard").textContent = (metadata.hazard_rate*100).toFixed(1)+"%";
+        document.getElementById("recovery").textContent = (metadata.recovery_rate*100).toFixed(0)+"%";
+        document.getElementById("threshold").textContent = currency.format(metadata.collateral.threshold);
+        document.getElementById("mta-mpor").textContent = currency.format(metadata.collateral.minimum_transfer_amount)+" · "+(metadata.collateral.margin_period_of_risk*252).toFixed(0)+" days";
+        document.getElementById("mean-reversion").textContent = metadata.hull_white.mean_reversion.toFixed(2);
+        document.getElementById("volatility").textContent = (metadata.hull_white.volatility*100).toFixed(2)+"%";
+        document.getElementById("paths-seed").textContent = number.format(metadata.path_count)+" · "+metadata.seed;
+        document.getElementById("kpi-error").textContent = currency.format(pricing.absolute_error);
+        document.getElementById("benchmark-line").textContent = "Analytic "+currency.format(pricing.analytic_value)+" · Monte Carlo "+currency.format(pricing.monte_carlo_value);
+        document.getElementById("ci-low").textContent = currency.format(pricing.confidence_interval_low);
+        document.getElementById("ci-high").textContent = currency.format(pricing.confidence_interval_high);
+        const span = pricing.confidence_interval_high-pricing.confidence_interval_low;
+        const point = span > 0 ? (pricing.analytic_value-pricing.confidence_interval_low)/span : .5;
+        document.getElementById("ci-range").style.left = "0%";
+        document.getElementById("ci-range").style.width = "100%";
+        document.getElementById("ci-point").style.left = Math.max(0,Math.min(100,point*100))+"%";
+      } catch (error) {
+        document.getElementById("run-label").textContent = "Report files not found";
+        document.getElementById("exposure-chart").innerHTML = '<div class="loading">Could not load the bundled reference reports. Open this page through the project server.</div>';
+        console.error(error);
+      }
+    }
+    init();
+  </script>
+</body>
+</html>

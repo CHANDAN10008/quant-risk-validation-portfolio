@@ -1,0 +1,2 @@
+analytic_value,monte_carlo_value,standard_error,confidence_interval_low,confidence_interval_high,absolute_error
+228025.48543085903,227333.17392408304,16470.850891888742,195050.8993812517,259615.4484669144,692.3115067759936

@@ -1,0 +1,36 @@
+{
+  "seed": 2026,
+  "path_count": 5000,
+  "antithetic": true,
+  "hazard_rate": 0.02,
+  "recovery_rate": 0.4,
+  "curve_times": [
+    0.0,
+    1.0,
+    2.0,
+    5.0,
+    10.0
+  ],
+  "curve_discount_factors": [
+    1.0,
+    0.9723883668012469,
+    0.9436499474367985,
+    0.8521437889662113,
+    0.7117703227626097
+  ],
+  "hull_white": {
+    "mean_reversion": 0.1,
+    "volatility": 0.01
+  },
+  "collateral": {
+    "threshold": 50000.0,
+    "minimum_transfer_amount": 25000.0,
+    "margin_period_of_risk": 0.03968253968253968
+  },
+  "observation_frequency_per_year": 52,
+  "model_notes": [
+    "Single-curve regular-coupon swap valuation.",
+    "Collateral calls occur on the weekly simulation grid.",
+    "The MPOR uses the last simulated collateral call on or before default time minus MPOR."
+  ]
+}

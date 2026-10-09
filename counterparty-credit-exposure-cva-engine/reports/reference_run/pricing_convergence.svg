@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="590" viewBox="0 0 1120 590">
+<rect width="100%" height="100%" fill="white"/>
+<text x="560.0" y="34.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#172b4d">Swap valuation convergence</text>
+<line x1="92.0" y1="500.0" x2="800.0" y2="500.0" stroke="#e6e9ed"/>
+<text x="82.0" y="504.0" text-anchor="end" font-family="Arial, sans-serif" font-size="11" fill="#263238">0.225</text>
+<line x1="92.0" y1="415.2" x2="800.0" y2="415.2" stroke="#e6e9ed"/>
+<text x="82.0" y="419.2" text-anchor="end" font-family="Arial, sans-serif" font-size="11" fill="#263238">0.226</text>
+<line x1="92.0" y1="330.4" x2="800.0" y2="330.4" stroke="#e6e9ed"/>
+<text x="82.0" y="334.4" text-anchor="end" font-family="Arial, sans-serif" font-size="11" fill="#263238">0.226</text>
+<line x1="92.0" y1="245.6" x2="800.0" y2="245.6" stroke="#e6e9ed"/>
+<text x="82.0" y="249.6" text-anchor="end" font-family="Arial, sans-serif" font-size="11" fill="#263238">0.227</text>
+<line x1="92.0" y1="160.8" x2="800.0" y2="160.8" stroke="#e6e9ed"/>
+<text x="82.0" y="164.8" text-anchor="end" font-family="Arial, sans-serif" font-size="11" fill="#263238">0.228</text>
+<line x1="92.0" y1="76.0" x2="800.0" y2="76.0" stroke="#e6e9ed"/>
+<text x="82.0" y="80.0" text-anchor="end" font-family="Arial, sans-serif" font-size="11" fill="#263238">0.228</text>
+<line x1="92.0" y1="76.0" x2="92.0" y2="500.0" stroke="#f1f2f4"/>
+<text x="92.0" y="522.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#263238">1e+03</text>
+<line x1="233.6" y1="76.0" x2="233.6" y2="500.0" stroke="#f1f2f4"/>
+<text x="233.6" y="522.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#263238">1.8e+03</text>
+<line x1="375.2" y1="76.0" x2="375.2" y2="500.0" stroke="#f1f2f4"/>
+<text x="375.2" y="522.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#263238">2.6e+03</text>
+<line x1="516.8" y1="76.0" x2="516.8" y2="500.0" stroke="#f1f2f4"/>
+<text x="516.8" y="522.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#263238">3.4e+03</text>
+<line x1="658.4" y1="76.0" x2="658.4" y2="500.0" stroke="#f1f2f4"/>
+<text x="658.4" y="522.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#263238">4.2e+03</text>
+<line x1="800.0" y1="76.0" x2="800.0" y2="500.0" stroke="#f1f2f4"/>
+<text x="800.0" y="522.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#263238">5e+03</text>
+<line x1="92.0" y1="500.0" x2="800.0" y2="500.0" stroke="#52606d"/>
+<line x1="92.0" y1="76.0" x2="92.0" y2="500.0" stroke="#52606d"/>
+<text x="446.0" y="558.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" fill="#263238">Number of paths</text>
+<text x="22.0" y="288.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" fill="#263238" transform="rotate(-90 22.0 288.0)">Swap value (USD millions)</text>
+<polyline points="92.0,477.3 357.5,249.2 800.0,187.5" fill="none" stroke="#2166ac" stroke-width="2.2"/>
+<circle cx="92.0" cy="477.3" r="3.5" fill="#2166ac"/>
+<circle cx="357.5" cy="249.2" r="3.5" fill="#2166ac"/>
+<circle cx="800.0" cy="187.5" r="3.5" fill="#2166ac"/>
+<polyline points="92.0,98.7 357.5,98.7 800.0,98.7" fill="none" stroke="#c43c39" stroke-width="2.2" stroke-dasharray="7 5"/>
+<line x1="830.0" y1="86.0" x2="857.0" y2="86.0" stroke="#2166ac" stroke-width="2.2"/>
+<text x="866.0" y="90.0" text-anchor="start" font-family="Arial, sans-serif" font-size="11" fill="#263238">Monte Carlo estimate</text>
+<line x1="830.0" y1="114.0" x2="857.0" y2="114.0" stroke="#c43c39" stroke-width="2.2" stroke-dasharray="7 5"/>
+<text x="866.0" y="118.0" text-anchor="start" font-family="Arial, sans-serif" font-size="11" fill="#263238">Analytic curve value</text>
+</svg>

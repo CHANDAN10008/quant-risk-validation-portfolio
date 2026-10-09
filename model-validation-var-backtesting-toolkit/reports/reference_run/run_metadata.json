@@ -1,0 +1,10 @@
+{
+  "data_type": "synthetic_demo",
+  "seed": 2026,
+  "input_file": null,
+  "input_observations": 1500,
+  "backtest_observations": 1250,
+  "lookback": 250,
+  "confidence": 0.99,
+  "return_units": "decimal simple returns; VaR as positive loss fraction"
+}

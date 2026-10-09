@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="540" viewBox="0 0 900 540">
+<rect width="100%" height="100%" fill="white"/>
+<text x="450.0" y="36.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#263238">Unilateral CVA by netting and collateral scenario</text>
+<line x1="80.0" y1="420.0" x2="850.0" y2="420.0" stroke="#e6e9ed"/>
+<text x="70.0" y="424.0" text-anchor="end" font-family="Arial, sans-serif" font-size="11" fill="#263238">0</text>
+<line x1="80.0" y1="350.8" x2="850.0" y2="350.8" stroke="#e6e9ed"/>
+<text x="70.0" y="354.8" text-anchor="end" font-family="Arial, sans-serif" font-size="11" fill="#263238">4.75</text>
+<line x1="80.0" y1="281.6" x2="850.0" y2="281.6" stroke="#e6e9ed"/>
+<text x="70.0" y="285.6" text-anchor="end" font-family="Arial, sans-serif" font-size="11" fill="#263238">9.49</text>
+<line x1="80.0" y1="212.4" x2="850.0" y2="212.4" stroke="#e6e9ed"/>
+<text x="70.0" y="216.4" text-anchor="end" font-family="Arial, sans-serif" font-size="11" fill="#263238">14.2</text>
+<line x1="80.0" y1="143.2" x2="850.0" y2="143.2" stroke="#e6e9ed"/>
+<text x="70.0" y="147.2" text-anchor="end" font-family="Arial, sans-serif" font-size="11" fill="#263238">19</text>
+<line x1="80.0" y1="74.0" x2="850.0" y2="74.0" stroke="#e6e9ed"/>
+<text x="70.0" y="78.0" text-anchor="end" font-family="Arial, sans-serif" font-size="11" fill="#263238">23.7</text>
+<line x1="80.0" y1="420.0" x2="850.0" y2="420.0" stroke="#52606d"/>
+<rect x="126.2" y="407.9" width="100.1" height="12.1" fill="#2166ac"/>
+<text x="176.2" y="398.9" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#263238">0.8</text>
+<text x="176.2" y="458.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#263238">netted uncollateralized</text>
+<rect x="318.7" y="111.1" width="100.1" height="308.9" fill="#d9822b"/>
+<text x="368.8" y="102.1" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#263238">21.2</text>
+<text x="368.8" y="458.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#263238">unnetted uncollateralized</text>
+<rect x="511.2" y="413.1" width="100.1" height="6.9" fill="#238b45"/>
+<text x="561.2" y="404.1" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#263238">0.5</text>
+<text x="561.2" y="458.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#263238">netted collateralized</text>
+<rect x="703.7" y="345.7" width="100.1" height="74.3" fill="#c43c39"/>
+<text x="753.8" y="336.7" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#263238">5.1</text>
+<text x="753.8" y="458.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#263238">unnetted collateralized</text>
+<text x="23.0" y="247.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#263238" transform="rotate(-90 23.0 247.0)">CVA (USD thousands)</text>
+</svg>
